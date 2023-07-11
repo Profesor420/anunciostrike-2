@@ -1,0 +1,350 @@
+/*
+* Esta hoja Js fue creada por Ezequiel Alonzo, ya sabes para que...
+* Ultima revision: 14/Nov/2019.
+* De nada!
+*/
+
+(function($) {
+    "use strict";
+    /*-----------------------------------------------------------------------------------*/
+    /* SCROLLING CON MARGEN INCLUIDO
+    /*-----------------------------------------------------------------------------------*/
+    $('.scroll-margin > a[href*="#"]:not([href="#"])').click(function() {
+        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+            if (target.length) {
+                $('html, body').animate({
+                    scrollTop: (target.offset().top - 70)
+                }, 1500, "easeInOutExpo");
+                return false;
+            }
+        }
+    });
+
+    /*-----------------------------------------------------------------------------------*/
+    /* SCROLLING SIN MARGEN
+    /*-----------------------------------------------------------------------------------*/
+    $(function() {
+        $('.scroll > a').bind('click', function(event) {
+            var $anchor = $(this);
+            $('html, body').stop().animate({
+                scrollTop: $($anchor.attr('href')).offset().top
+            }, 1500, 'easeInOutExpo');
+            event.preventDefault();
+        });
+    });
+
+    /*-----------------------------------------------------------------------------------*/
+    /* CIERRA EL MENU CUANDO SE HACE CLICK A UN ITEM DEL MENU
+    /*-----------------------------------------------------------------------------------*/
+    $('.scroll').click(function() {
+        $('.navbar-collapse').collapse('hide');
+    });
+
+    /*-----------------------------------------------------------------------------------*/
+    /* ACTIVA scrollspy Y AGREGA LA CLASE .active A ITEM EN SCROLL
+    /*-----------------------------------------------------------------------------------*/
+    $('body').scrollspy({
+        target: '#mainNav',
+        offset: 100
+    });
+
+
+
+    /*-----------------------------------------------------------------------------------*/
+    /* COUNTDOWN CLOCK INIT
+    /*-----------------------------------------------------------------------------------*/
+    // $('#clock').countdown('2019/08/12')
+    // .on('update.countdown', function(event) {
+    // 	var $this = $(this).html(event.strftime(''
+    // 		+ '<div><span class="time">%D<span class="det">días</span></span></div>'
+    // 		+ '<div><span class="time">%H<span class="det">horas</span></span></div>'
+    // 		+ '<div><span class="time">%M<span class="det">minutos</span></span></div>'
+    // 		+ '<div><span class="time">%S<span class="det">segundos</span></span></div>'));
+    // })
+    // .on('finish.countdown', function(event) {
+    // 	$(this).html('')
+    // 	.parent().addClass('disabled');
+    // });
+
+
+    /*-----------------------------------------------------------------------------------*/
+    /* ANIMACION EN NUMEROS
+    /*-----------------------------------------------------------------------------------*/
+    // var a = 0;
+    // $(window).scroll(function() {
+    // 	var oTop = $('#num').offset().top - window.innerHeight;
+    // 	if (a == 0 && $(window).scrollTop() > oTop) {
+    // 		$('[data-num]').each(function() {
+    // 			var $this = $(this),
+    // 			countTo = $this.attr('data-num');
+    // 			$({countNum: $this.text()})
+    // 			.animate({countNum: countTo},{
+    // 				duration: 5000,
+    // 				easing: 'swing',
+    // 				step: function() {$this.text(Math.floor(this.countNum));},
+    // 				complete: function() {$this.text(this.countNum);}
+    // 			});
+    // 		}); a = 1;
+    // 	}
+    // });
+
+
+    $(window).on('load', function(){
+        /*-----------------------------------------------------------------------------------*/
+        /* FLEXSLIDER INIT
+        /*-----------------------------------------------------------------------------------*/
+        // $('a').on('click', function(){
+        // 	$('.flexslider.rotate').flexslider( parseInt($(this).attr('data-goto')) );
+        // });
+        $('.flexslider.rotate').flexslider({
+            directionNav: false,
+            controlNav: true,
+            pauseOnAction: true,
+            pauseOnHover: false,
+            animation: 'fade',
+            animationLoop: true,
+        });
+
+        /*-----------------------------------------------------------------------------------*/
+        /* FADING BODY
+        /*-----------------------------------------------------------------------------------*/
+        // $('a').click(function(){
+        // 	$('body').animate({'opacity': '0'}, 500);
+        // });
+        $('body').animate({'opacity': '1'}, 500);
+
+        /*-----------------------------------------------------------------------------------*/
+        /* CLASSES NECESARIAS PARA EL MENU (Bootstrap)
+        /*-----------------------------------------------------------------------------------*/
+        // $('.menu-head-right li.menu-item-has-children').addClass('dropdown');
+        $('li.menu-item-has-children').addClass('dropdown');
+        $('li.menu-item-has-children > a').addClass('dropdown-toggle');
+        $('li.menu-item-has-children > a').attr('role','button').attr('data-toggle','dropdown')
+        $('li.menu-item-has-children > a').attr('aria-haspopup','true').attr('aria-expanded','false');
+
+        //
+        // $('.mifiltro > ul').addClass('nav flex-column');
+        // $('.mifiltro li.cat-parent').addClass('dropdown');
+        // $('.mifiltro li.cat-parent > a').addClass('dropdown-toggle');
+        // $('.mifiltro li.cat-parent > a').attr('role','button').attr('data-toggle','dropdown')
+        // $('.mifiltro li.cat-parent > a').attr('aria-haspopup','true').attr('aria-expanded','false');
+        // $('.mifiltro > ul > li > ul.children').addClass('sub-menu dropdown-menu');
+
+
+        /*-----------------------------------------------------------------------------------*/
+        /* AGREGAR/REMOVER EN PANTALLA CLASE EN ESPECIFICO
+        /*-----------------------------------------------------------------------------------*/
+        var $animation_elements = $('.ani');
+        var $window = $(window);
+        function check_if_in_view() {
+            var window_height = $window.height();
+            var window_top_position = $window.scrollTop();
+            var window_bottom_position = (window_top_position + window_height);
+            $.each($animation_elements, function() {
+                var $element = $(this);
+                var element_height = $element.outerHeight();
+                var element_top_position = $element.offset().top;
+                var element_bottom_position = (element_top_position + element_height);
+                if ((element_bottom_position >= window_top_position) &&
+                (element_top_position <= window_bottom_position)) {
+                    $element.addClass('in-view');
+                } else {
+                    $element.removeClass('in-view');
+                }
+            });
+        }
+        $window.on('scroll resize', check_if_in_view);
+        $window.trigger('scroll');
+
+        /*-----------------------------------------------------------------------------------*/
+        /* FANCYBOX INIT
+        /*-----------------------------------------------------------------------------------*/
+        $('[data-fancybox]').fancybox({
+            infobar : false,
+            buttons : ['close'],
+            hideScrollbar: false,
+        });
+
+        /*-----------------------------------------------------------------------------------*/
+        /* POPUP FANCYBOX
+        /*-----------------------------------------------------------------------------------*/
+        // $("#vvideo").fancybox({'overlayShow': true,'hideScrollbar': false}).trigger('click');
+        // <a id="vvideo" data-fancybox data-src="#modalvid" href="javascript:;"></a>
+        // <div style="display:none;" id="modalvid" class="p-0"></div>
+
+        /*-----------------------------------------------------------------------------------*/
+        /* ANIMACION SIMPLE PARA ENTRADA EN PANTALLA
+        /*-----------------------------------------------------------------------------------*/
+        // $('').delay(600).animate({'opacity': '1'}, 1200);
+
+        /*-----------------------------------------------------------------------------------*/
+        /* CAMBIO DE TEXTO Y VALOR EN BTN DROPDOWN (Como el de LPEF)
+        /*-----------------------------------------------------------------------------------*/
+        // $("div#serie-tab > a").click(function(){
+        // 	$("[data-text-btn='serie-btn']").text($(this).text());
+        // 	$("[data-text-btn='serie-btn']").val($(this).text());
+        // });
+    });
+
+
+
+    /*-----------------------------------------------------------------------------------*/
+    /* SLICK SLIDER
+    /*-----------------------------------------------------------------------------------*/
+    $('.bloquesprod').slick({
+        dots: false,
+        arrows: true,
+        // centerMode: true,
+        // centerPadding: '60px',
+        // infinite: true,
+        // speed: 300,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        appendArrows: $(".btn-slick-res"),
+        // customPaging: function(slick,index) {
+        // var targetImage = slick.$slides.eq(index).find('img').attr('data-year');
+        // return targetImage;
+        // },
+        responsive: [
+            {
+                breakpoint: 992,
+                centerMode: false,
+                settings: {
+					dots: false,
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 768,
+                centerMode: true,
+                settings: {
+					dots: false,
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 576,
+                centerMode: true,
+                settings: {
+					dots: true,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+            }
+        ]
+    });
+    $('.bloques').slick({
+        dots: true,
+        arrows: false,
+        // centerMode: true,
+        // centerPadding: '60px',
+        // infinite: true,
+        // speed: 300,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        // appendArrows: $(".btn-slick"),
+        // customPaging: function(slick,index) {
+        // var targetImage = slick.$slides.eq(index).find('img').attr('data-year');
+        // return targetImage;
+        // },
+        responsive: [
+            {
+                breakpoint: 992,
+                centerMode: false,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 768,
+                centerMode: true,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 576,
+                centerMode: true,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+            }
+        ]
+    });
+    $('.bloque-grande').slick({
+        dots: false,
+        arrows: true,
+        appendArrows: $(".btn-slick"),
+        // centerMode: true,
+        // centerPadding: '60px',
+        // infinite: true,
+        // speed: 300,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        // appendArrows: $(".btn-slick"),
+        // customPaging: function(slick,index) {
+        // var targetImage = slick.$slides.eq(index).find('img').attr('data-year');
+        // return targetImage;
+        // },
+    });
+    $('.bloques-slide').slick({
+        dots: true,
+        arrows: false,
+        // centerMode: true,
+        // centerPadding: '60px',
+        // infinite: true,
+        // speed: 300,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        appendDots: $(".btn-slick"),
+    });
+    $('.bloques-vertical').slick({
+        dots: true,
+        arrows: false,
+        // centerMode: true,
+        // centerPadding: '60px',
+        // infinite: true,
+        // speed: 300,
+        autoplay: true,
+        autoplaySpeed: 14000,
+        pauseOnHover: false,
+        pauseOnFocus: false,
+        vertical: true,
+        verticalSwiping: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        appendDots: $(".btn-slick"),
+    });
+
+    /*-----------------------------------------------------------------------------------*/
+    /* ANIMACION DE ELEMENTOS
+    /*-----------------------------------------------------------------------------------*/
+    AOS.init({
+        duration: 1000,
+        once: true,
+        // mirror: false,
+    });
+
+    $('p.cart-empty').text('Tu lista esta vacía.');
+    $('.nochangetext button.single_add_to_cart_button').text('Agregar');
+
+    // { código para hacer update automático de carrito en la pantalla CART al dar click en (-) o (+) clase qib-button
+    setInterval(function(){
+        $('.qib-button').click(function() {
+            setTimeout(function(){
+                $("[name='update_cart']").trigger("click");
+            }, 1000);
+        });
+    }, 1000);
+    // }
+
+
+
+})(jQuery); // End of use strict
